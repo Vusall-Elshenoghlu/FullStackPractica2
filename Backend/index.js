@@ -11,10 +11,11 @@ app.listen(4000, () =>{
 })
 
 let productSchema = new mongoose.Schema({
-    name:String,
+    fullName:String,
     age:Number,
     description:String,
-    profession:String
+    profession:String,
+    image:String
 })
 let ProductModel = mongoose.model("humans",productSchema)
 
@@ -25,18 +26,22 @@ app.get("/api/humans/",async (req,res) =>{
     let myProducts = await ProductModel.find()
     res.send(myProducts)
 })
-app.get("api/humans/get/:id", async (req,res) =>{
-    let myProduct = await ProductModel.findById()
+app.get("/api/humans/:id", async (req,res) =>{
+    let {id} = req.params
+    let myProduct = await ProductModel.findById(id)
     res.send({
         message:"Succes GetByID",
         data:myProduct
     })
 })
-app.post("/api/humans", async (req,res) =>{
+app.post("/api/humans/", async (req,res) =>{
     let newHuman = ProductModel(req.body);
     await newHuman.save();
-    res.post("Succes Post...");
-    data:req.body;
+    res.send({
+        message:"Succes Post...",
+        data:req.body
+    });
+    
 })
 
 app.delete("/api/humans/:id", async (req,res) =>{
